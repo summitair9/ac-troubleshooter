@@ -8,22 +8,22 @@
         body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
         h1 { color: #1e3a8a; }
         .step { background: white; padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 6px solid #1e3a8a; }
-        button { padding: 12px 20px; margin: 5px; font-size: 16px; border-radius: 8px; }
-        .option { background: #eff6ff; }
+        button { padding: 12px 20px; margin: 8px; font-size: 16px; border-radius: 8px; background: #1e40af; color: white; border: none; }
+        button:hover { background: #1e3a8a; }
+        ul, ol { text-align: left; }
     </style>
 </head>
 <body>
-    <h1>AC Service Call Troubleshooter</h1>
-    <p><strong>For your team - Follow the steps</strong></p>
+    <h1>🚀 Eli's HVAC - AC Troubleshooter</h1>
 
     <div id="start">
-        <h2>What is the main problem?</h2>
-        <button onclick="startTrouble(1)">1. No Power / Not Turning On</button><br>
-        <button onclick="startTrouble(2)">2. Running But Not Cooling</button><br>
-        <button onclick="startTrouble(3)">3. Frozen / Ice on Pipes</button><br>
+        <h2>What is the customer's main issue?</h2>
+        <button onclick="startTrouble(1)">1. No Power / Unit Not Turning On</button><br>
+        <button onclick="startTrouble(2)">2. Running But Not Cooling (Warm Air)</button><br>
+        <button onclick="startTrouble(3)">3. Frozen / Ice on Coils or Pipes</button><br>
         <button onclick="startTrouble(4)">4. Weak or No Airflow</button><br>
-        <button onclick="startTrouble(5)">5. Noises, Smells, or Leaks</button><br>
-        <button onclick="startTrouble(6)">6. Other</button>
+        <button onclick="startTrouble(5)">5. Strange Noises, Smells, or Leaks</button><br>
+        <button onclick="startTrouble(6)">6. Other Issue</button>
     </div>
 
     <div id="result" style="display:none;"></div>
@@ -33,60 +33,94 @@
             let html = `<div class="step">`;
             
             if (choice === 1) {
-                html += `<h2>No Power</h2>
-                <p>✅ Ask customer to check:</p>
+                html += `<h2>1. No Power</h2>
+                <p>Ask customer to check:</p>
                 <ul>
-                    <li>Thermostat batteries</li>
-                    <li>Breakers + outdoor disconnect</li>
-                    <li>Dirty air filter (replace if needed)</li>
+                    <li>Thermostat batteries (replace if old)</li>
+                    <li>Thermostat set to Cool + Fan Auto</li>
+                    <li>Indoor breaker and outdoor disconnect switch</li>
+                    <li>Air filter — replace if dirty</li>
                 </ul>
-                <p><strong>If still no power → Schedule tech</strong></p>`;
+                <p><strong>Still no power? → Schedule tech</strong></p>`;
             } 
             else if (choice === 2) {
-                html += `<h2>Not Cooling</h2>
-                <p>✅ Step-by-step:</p>
+                html += `<h2>2. Not Cooling</h2>
+                <p>Step-by-step for customer:</p>
                 <ol>
-                    <li>Replace air filter</li>
-                    <li>Clear debris around outdoor unit</li>
-                    <li>Check for ice on pipes</li>
+                    <li>Replace air filter (most common fix)</li>
+                    <li>Clear debris/grass around outdoor unit (2ft clearance)</li>
+                    <li>Check for ice on the suction line</li>
                 </ol>
                 <p>If no improvement after 1 hour → Schedule tech</p>`;
             } 
             else if (choice === 3) {
-                html += `<h2>Frozen Unit</h2>
-                <p>✅ Tell customer:</p>
+                html += `<h2>3. Frozen Unit</h2>
+                <p>Exact instructions to give customer:</p>
                 <ol>
                     <li>Turn thermostat OFF</li>
-                    <li>Set fan to ON</li>
+                    <li>Set fan to ON (helps thaw)</li>
                     <li>Replace air filter</li>
-                    <li>Wait 2–6 hours to thaw</li>
+                    <li>Wait 2–6 hours until fully thawed</li>
+                    <li>Do NOT chip ice</li>
                 </ol>
                 <p>If it freezes again → Schedule tech</p>`;
             } 
             else if (choice === 4) {
-                html += `<h2>Weak Airflow</h2>
-                <p>✅ Checks:</p>
+                html += `<h2>4. Weak / No Airflow</h2>
+                <p>Checks:</p>
                 <ul>
                     <li>Replace air filter</li>
-                    <li>Open all vents</li>
-                    <li>Is indoor fan running?</li>
+                    <li>Open all vents/registers</li>
+                    <li>Listen for indoor blower running</li>
                 </ul>
-                <p>If fan not running → Schedule tech</p>`;
+                <p>Fan not running? → Schedule tech</p>`;
             } 
             else if (choice === 5) {
-                html += `<h2>Noises / Smells / Leaks</h2>
-                <p>⚠️ <strong>Turn system OFF immediately</strong></p>
-                <p>Schedule tech right away.</p>`;
+                html += `<h2>5. Noises, Smells, or Leaks</h2>
+                <p>⚠️ <strong>Immediate action:</strong></p>
+                <ul>
+                    <li>Burning smell or grinding noise → Turn OFF</li>
+                    <li>Water leaking → Turn OFF</li>
+                </ul>
+                <p>Schedule tech immediately</p>`;
             } 
             else {
-                html += `<h2>Other Issue</h2>
-                <p>Please get more details from customer and decide.</p>`;
+                html += `<h2>6. Other Issue</h2>
+                <p>Get more details from customer and decide.</p>`;
             }
 
-            html += `<br><button onclick="restart()">Start Over</button></div>`;
+            html += `<br>
+            <button onclick="showForm()">Call Completed - Log This Call</button>
+            <button onclick="restart()">Start New Call</button></div>`;
+
             document.getElementById("start").style.display = "none";
             document.getElementById("result").innerHTML = html;
             document.getElementById("result").style.display = "block";
+        }
+
+        function showForm() {
+            let formHTML = `
+            <div class="step">
+                <h2>✅ Call Completed</h2>
+                <p>Please fill this quick log:</p>
+                <p>Customer Name: <input type="text" id="name" style="width:100%; margin:5px 0;"></p>
+                <p>Issue: <input type="text" id="issue" style="width:100%; margin:5px 0;"></p>
+                <p>Outcome: 
+                    <select id="outcome" style="width:100%; margin:5px 0;">
+                        <option>Fixed over phone</option>
+                        <option>Tech scheduled</option>
+                        <option>Needs follow-up</option>
+                    </select>
+                </p>
+                <button onclick="submitLog()">Save Log</button>
+                <button onclick="restart()">Start New Call</button>
+            </div>`;
+            document.getElementById("result").innerHTML = formHTML;
+        }
+
+        function submitLog() {
+            alert("✅ Call logged! Thank you.\n\n(In real use this would save to a spreadsheet.)");
+            restart();
         }
 
         function restart() {
