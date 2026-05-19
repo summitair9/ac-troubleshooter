@@ -5,128 +5,208 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AC Troubleshooter - QUALITY AIR</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f8ff; 
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 180px;
+        }
         h1 { color: #1e3a8a; }
-        .step { background: white; padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 6px solid #1e3a8a; }
-        button { padding: 12px 20px; margin: 8px; font-size: 16px; border-radius: 8px; background: #1e40af; color: white; border: none; }
+        .step { 
+            background: white; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 10px; 
+            border-left: 6px solid #1e3a8a; 
+        }
+        button { 
+            padding: 12px 20px; 
+            margin: 8px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            background: #1e40af; 
+            color: white; 
+            border: none; 
+        }
         button:hover { background: #1e3a8a; }
-        ul, ol { text-align: left; }
+        .yesno { font-size: 18px; padding: 15px 25px; }
     </style>
 </head>
 <body>
-    <h1> QUALITY AIR - AC Troubleshooter</h1>
-
-    <div id="start">
-        <h2>What is the customer's main issue?</h2>
-        <button onclick="startTrouble(1)">1. No Power / Unit Not Turning On</button><br>
-        <button onclick="startTrouble(2)">2. Running But Not Cooling (Warm Air)</button><br>
-        <button onclick="startTrouble(3)">3. Frozen / Ice on Coils or Pipes</button><br>
-        <button onclick="startTrouble(4)">4. Weak or No Airflow</button><br>
-        <button onclick="startTrouble(5)">5. Strange Noises, Smells, or Leaks</button><br>
-        <button onclick="startTrouble(6)">6. Other Issue</button>
+    <div class="header">
+        <img src="logo.png" alt="QUALITY AIR Logo" class="logo">
+        <h1>🚀 QUALITY AIR - AC Troubleshooter</h1>
     </div>
 
-    <div id="result" style="display:none;"></div>
+    <div id="content"></div>
 
     <script>
-        function startTrouble(choice) {
-            let html = `<div class="step">`;
-            
+        let currentStep = {};
+
+        function showMainMenu() {
+            let html = `
+            <div class="step">
+                <h2>What is the customer's main issue?</h2>
+                <button onclick="startBranch(1)">1. No Power / Unit Not Turning On</button><br><br>
+                <button onclick="startBranch(2)">2. Running But Not Cooling</button><br><br>
+                <button onclick="startBranch(3)">3. Frozen / Ice on Coils or Pipes</button><br><br>
+                <button onclick="startBranch(4)">4. Weak or No Airflow</button><br><br>
+                <button onclick="startBranch(5)">5. Strange Noises, Smells, or Leaks</button><br><br>
+                <button onclick="startBranch(6)">6. Other Issue</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function startBranch(choice) {
             if (choice === 1) {
-                html += `<h2>1. No Power</h2>
-                <p>Ask customer to check:</p>
-                <ul>
-                    <li>Thermostat batteries (replace if old)</li>
-                    <li>Thermostat set to Cool + Fan Auto</li>
-                    <li>Indoor breaker and outdoor disconnect switch</li>
-                    <li>Air filter — replace if dirty</li>
-                </ul>
-                <p><strong>Still no power? → Schedule tech</strong></p>`;
-            } 
-            else if (choice === 2) {
-                html += `<h2>2. Not Cooling</h2>
-                <p>Step-by-step for customer:</p>
-                <ol>
-                    <li>Replace air filter (most common fix)</li>
-                    <li>Clear debris/grass around outdoor unit (2ft clearance)</li>
-                    <li>Check for ice on the suction line</li>
-                </ol>
-                <p>If no improvement after 1 hour → Schedule tech</p>`;
-            } 
-            else if (choice === 3) {
-                html += `<h2>3. Frozen Unit</h2>
-                <p>Exact instructions to give customer:</p>
-                <ol>
-                    <li>Turn thermostat OFF</li>
-                    <li>Set fan to ON (helps thaw)</li>
-                    <li>Replace air filter</li>
-                    <li>Wait 2–6 hours until fully thawed</li>
-                    <li>Do NOT chip ice</li>
-                </ol>
-                <p>If it freezes again → Schedule tech</p>`;
-            } 
-            else if (choice === 4) {
-                html += `<h2>4. Weak / No Airflow</h2>
-                <p>Checks:</p>
-                <ul>
-                    <li>Replace air filter</li>
-                    <li>Open all vents/registers</li>
-                    <li>Listen for indoor blower running</li>
-                </ul>
-                <p>Fan not running? → Schedule tech</p>`;
-            } 
-            else if (choice === 5) {
-                html += `<h2>5. Noises, Smells, or Leaks</h2>
-                <p>⚠️ <strong>Immediate action:</strong></p>
-                <ul>
-                    <li>Burning smell or grinding noise → Turn OFF</li>
-                    <li>Water leaking → Turn OFF</li>
-                </ul>
-                <p>Schedule tech immediately</p>`;
-            } 
-            else {
-                html += `<h2>6. Other Issue</h2>
-                <p>Get more details from customer and decide.</p>`;
+                currentStep = { branch: 1, step: 1 };
+                askNoPower();
+            } else if (choice === 2) {
+                currentStep = { branch: 2, step: 1 };
+                askNotCooling();
+            } else if (choice === 3) {
+                currentStep = { branch: 3, step: 1 };
+                askFrozen();
+            } else if (choice === 4) {
+                currentStep = { branch: 4, step: 1 };
+                askAirflow();
+            } else if (choice === 5) {
+                showResult("⚠️ Strange Noises, Smells, or Leaks", 
+                    "Turn system OFF immediately.<br>Schedule tech right away.");
+            } else {
+                showResult("Other Issue", "Get full details from customer and decide if tech is needed.");
             }
+        }
 
-            html += `<br>
-            <button onclick="showForm()">Call Completed - Log This Call</button>
-            <button onclick="restart()">Start New Call</button></div>`;
+        // Branch 1: No Power
+        function askNoPower() {
+            let html = `<div class="step">
+                <h2>No Power - Step 1</h2>
+                <p>Did the customer try new thermostat batteries and correct settings (Cool + Auto)?</p>
+                <button class="yesno" onclick="noPowerStep2(true)">Yes</button>
+                <button class="yesno" onclick="noPowerStep2(false)">No</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
 
-            document.getElementById("start").style.display = "none";
-            document.getElementById("result").innerHTML = html;
-            document.getElementById("result").style.display = "block";
+        function noPowerStep2(yes) {
+            if (!yes) {
+                showResult("No Power", "Instruct customer to replace batteries, set to Cool + Auto, lower temp 5°F.<br>If still dead → Schedule tech.");
+                return;
+            }
+            let html = `<div class="step">
+                <h2>No Power - Step 2</h2>
+                <p>Did resetting the breakers / outdoor disconnect fix it?</p>
+                <button class="yesno" onclick="noPowerStep3(true)">Yes</button>
+                <button class="yesno" onclick="noPowerStep3(false)">No</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function noPowerStep3(yes) {
+            if (yes) showResult("No Power", "✅ Problem solved! Ask them to monitor for 30 minutes.");
+            else showResult("No Power", "Schedule tech (possible capacitor, board, or wiring issue).");
+        }
+
+        // Branch 2: Not Cooling
+        function askNotCooling() {
+            let html = `<div class="step">
+                <h2>Not Cooling - Step 1</h2>
+                <p>Is the air filter dirty?</p>
+                <button class="yesno" onclick="notCoolingStep2(true)">Yes</button>
+                <button class="yesno" onclick="notCoolingStep2(false)">No</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function notCoolingStep2(yes) {
+            if (yes) {
+                showResult("Not Cooling", "✅ Tell customer to replace filter + clear outdoor unit.<br>Monitor 1 hour.");
+                return;
+            }
+            let html = `<div class="step">
+                <h2>Not Cooling - Step 2</h2>
+                <p>Is there ice on the indoor coil or suction line?</p>
+                <button class="yesno" onclick="showFrozenResult()">Yes</button>
+                <button class="yesno" onclick="finalNotCooling()">No</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function finalNotCooling() {
+            showResult("Not Cooling", "Most likely low refrigerant or dirty coils.<br>Schedule tech.");
+        }
+
+        function showFrozenResult() {
+            showResult("Frozen Unit", "1. Turn thermostat OFF<br>2. Set fan to ON<br>3. Replace filter<br>4. Wait 2-6 hours to thaw<br>If refreezes → Schedule tech");
+        }
+
+        // Branch 3: Frozen
+        function askFrozen() {
+            showFrozenResult();
+        }
+
+        // Branch 4: Weak Airflow
+        function askAirflow() {
+            let html = `<div class="step">
+                <h2>Weak / No Airflow</h2>
+                <p>Did replacing the air filter help?</p>
+                <button class="yesno" onclick="airflowStep2(true)">Yes</button>
+                <button class="yesno" onclick="airflowStep2(false)">No</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function airflowStep2(yes) {
+            if (yes) {
+                showResult("Airflow Fixed", "✅ Great! Remind them to change filter monthly.");
+            } else {
+                showResult("Weak Airflow", "Check if indoor blower is running.<br>If not → Schedule tech (motor or capacitor issue).");
+            }
+        }
+
+        function showResult(title, message) {
+            let html = `<div class="step">
+                <h2>${title}</h2>
+                <p>${message}</p>
+                <button onclick="showForm()">Call Completed - Log This Call</button>
+                <button onclick="showMainMenu()">Start New Call</button>
+            </div>`;
+            document.getElementById("content").innerHTML = html;
         }
 
         function showForm() {
             let formHTML = `
             <div class="step">
                 <h2>✅ Call Completed</h2>
-                <p>Please fill this quick log:</p>
-                <p>Customer Name: <input type="text" id="name" style="width:100%; margin:5px 0;"></p>
-                <p>Issue: <input type="text" id="issue" style="width:100%; margin:5px 0;"></p>
+                <p>Customer Name: <input type="text" id="name" style="width:100%; margin:8px 0;"></p>
+                <p>Issue: <input type="text" id="issue" style="width:100%; margin:8px 0;"></p>
                 <p>Outcome: 
-                    <select id="outcome" style="width:100%; margin:5px 0;">
+                    <select id="outcome" style="width:100%; margin:8px 0;">
                         <option>Fixed over phone</option>
                         <option>Tech scheduled</option>
                         <option>Needs follow-up</option>
                     </select>
                 </p>
                 <button onclick="submitLog()">Save Log</button>
-                <button onclick="restart()">Start New Call</button>
+                <button onclick="showMainMenu()">New Call</button>
             </div>`;
-            document.getElementById("result").innerHTML = formHTML;
+            document.getElementById("content").innerHTML = formHTML;
         }
 
         function submitLog() {
             alert("✅ Call logged for QUALITY AIR! Thank you.");
-            restart();
+            showMainMenu();
         }
 
-        function restart() {
-            document.getElementById("start").style.display = "block";
-            document.getElementById("result").style.display = "none";
-        }
+        // Start the app
+        showMainMenu();
     </script>
 </body>
 </html>
