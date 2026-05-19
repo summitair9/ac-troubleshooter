@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Troubleshooter</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f0f8ff; }
+        h1 { color: #1e3a8a; }
+        .step { background: white; padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 6px solid #1e3a8a; }
+        button { padding: 12px 20px; margin: 5px; font-size: 16px; border-radius: 8px; }
+        .option { background: #eff6ff; }
+    </style>
+</head>
+<body>
+    <h1>AC Service Call Troubleshooter</h1>
+    <p><strong>For your team - Follow the steps</strong></p>
+
+    <div id="start">
+        <h2>What is the main problem?</h2>
+        <button onclick="startTrouble(1)">1. No Power / Not Turning On</button><br>
+        <button onclick="startTrouble(2)">2. Running But Not Cooling</button><br>
+        <button onclick="startTrouble(3)">3. Frozen / Ice on Pipes</button><br>
+        <button onclick="startTrouble(4)">4. Weak or No Airflow</button><br>
+        <button onclick="startTrouble(5)">5. Noises, Smells, or Leaks</button><br>
+        <button onclick="startTrouble(6)">6. Other</button>
+    </div>
+
+    <div id="result" style="display:none;"></div>
+
+    <script>
+        function startTrouble(choice) {
+            let html = `<div class="step">`;
+            
+            if (choice === 1) {
+                html += `<h2>No Power</h2>
+                <p>✅ Ask customer to check:</p>
+                <ul>
+                    <li>Thermostat batteries</li>
+                    <li>Breakers + outdoor disconnect</li>
+                    <li>Dirty air filter (replace if needed)</li>
+                </ul>
+                <p><strong>If still no power → Schedule tech</strong></p>`;
+            } 
+            else if (choice === 2) {
+                html += `<h2>Not Cooling</h2>
+                <p>✅ Step-by-step:</p>
+                <ol>
+                    <li>Replace air filter</li>
+                    <li>Clear debris around outdoor unit</li>
+                    <li>Check for ice on pipes</li>
+                </ol>
+                <p>If no improvement after 1 hour → Schedule tech</p>`;
+            } 
+            else if (choice === 3) {
+                html += `<h2>Frozen Unit</h2>
+                <p>✅ Tell customer:</p>
+                <ol>
+                    <li>Turn thermostat OFF</li>
+                    <li>Set fan to ON</li>
+                    <li>Replace air filter</li>
+                    <li>Wait 2–6 hours to thaw</li>
+                </ol>
+                <p>If it freezes again → Schedule tech</p>`;
+            } 
+            else if (choice === 4) {
+                html += `<h2>Weak Airflow</h2>
+                <p>✅ Checks:</p>
+                <ul>
+                    <li>Replace air filter</li>
+                    <li>Open all vents</li>
+                    <li>Is indoor fan running?</li>
+                </ul>
+                <p>If fan not running → Schedule tech</p>`;
+            } 
+            else if (choice === 5) {
+                html += `<h2>Noises / Smells / Leaks</h2>
+                <p>⚠️ <strong>Turn system OFF immediately</strong></p>
+                <p>Schedule tech right away.</p>`;
+            } 
+            else {
+                html += `<h2>Other Issue</h2>
+                <p>Please get more details from customer and decide.</p>`;
+            }
+
+            html += `<br><button onclick="restart()">Start Over</button></div>`;
+            document.getElementById("start").style.display = "none";
+            document.getElementById("result").innerHTML = html;
+            document.getElementById("result").style.display = "block";
+        }
+
+        function restart() {
+            document.getElementById("start").style.display = "block";
+            document.getElementById("result").style.display = "none";
+        }
+    </script>
+</body>
+</html>
