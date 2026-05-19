@@ -17,7 +17,10 @@
         .logo {
             max-width: 180px;
         }
-        h1 { color: #1e3a8a; }
+        h1 { 
+            color: #1e3a8a; 
+            margin: 10px 0;
+        }
         .step { 
             background: white; 
             padding: 20px; 
@@ -41,7 +44,7 @@
 <body>
     <div class="header">
         <img src="logo.png" alt="QUALITY AIR Logo" class="logo">
-        <h1>🚀 QUALITY AIR - AC Troubleshooter</h1>
+        <h1>QUALITY AIR - AC Troubleshooter</h1>
     </div>
 
     <div id="content"></div>
@@ -77,7 +80,7 @@
                 currentStep = { branch: 4, step: 1 };
                 askAirflow();
             } else if (choice === 5) {
-                showResult("⚠️ Strange Noises, Smells, or Leaks", 
+                showResult("Strange Noises, Smells, or Leaks", 
                     "Turn system OFF immediately.<br>Schedule tech right away.");
             } else {
                 showResult("Other Issue", "Get full details from customer and decide if tech is needed.");
